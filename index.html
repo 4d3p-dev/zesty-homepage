@@ -51,6 +51,15 @@
             font-size: 48px;
             font-weight: bold;
             margin: auto;
+            max-width: 90%;
+            line-height: 1.4;
+            white-space: nowrap;
+            opacity: 0;
+            animation: fadeIn 2s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         main {
             flex-grow: 1;
@@ -68,6 +77,8 @@
             }
             .welcome {
                 font-size: 36px;
+                white-space: normal;
+                max-width: 80%;
             }
         }
     </style>
@@ -85,7 +96,7 @@
         </nav>
     </header>
     <main>
-        <p class="welcome">Zestyのホームページに<br>ようこそ。</p>
+        <p class="welcome">Zestyのホームページにようこそ。</p>
     </main>
 </body>
 </html>
