@@ -44,7 +44,7 @@
         }
         nav a {
             color: #808080;
-            text-decoration: none;
+            text-decoration: none; /* 下線を削除 */
             font-weight: normal;
             font-size: 16px;
             flex: 1;
@@ -84,7 +84,7 @@
             50% { opacity: 0; transform: scale(1.05); }
         }
         .menu-toggle {
-            display: none;
+            display: block; /* 常に表示するように変更 */
             font-size: 30px;
             cursor: pointer;
         }
@@ -115,25 +115,6 @@
             align-items: center;
             justify-content: center;
         }
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                text-align: center;
-            }
-            nav {
-                width: 100%;
-                display: none;
-            }
-            .menu-toggle {
-                display: block;
-            }
-            .welcome {
-                font-size: 18px;
-                white-space: normal;
-                max-width: 80%;
-                text-align: center;
-            }
-        }
     </style>
 </head>
 <body>
@@ -156,6 +137,7 @@
             <a href="https://zesty.f5.si/join">join</a>
             <a href="https://zesty.f5.si/status">status</a>
             <a href="https://zesty.f5.si/contact">contact</a>
+            <a href="#" onclick="toggleMenu()">Close Menu</a> <!-- 閉じるリンクを追加 -->
         </div>
     </header>
     <main>
