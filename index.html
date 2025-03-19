@@ -61,9 +61,8 @@
             font-weight: bold;
             margin: auto;
             max-width: 90%;
-            line-height: 1.2;
-            overflow: hidden;
-            white-space: nowrap;
+            line-height: 1.5; /* 改行を反映 */
+            white-space: normal; /* 見切れないように調整 */
             display: inline-block;
             text-align: center;
         }
@@ -139,7 +138,7 @@
             <a href="https://zesty.f5.si/status">ステータス</a>
             <a href="https://zesty.f5.si/contact">連絡先</a>
         </nav>
-        <a href="index_en.html" class="lang-switch">English</a>
+        <a href="en.html" class="lang-switch">English</a> <!-- 英語版へのリンク修正 -->
     </header>
     <div class="mobile-menu" id="mobile-menu">
         <a href="https://zesty.f5.si/command">コマンド</a>
@@ -167,13 +166,13 @@
             });
 
             const welcomeText = document.getElementById("welcome-text");
-            let text = "Zestyのホームページへようこそ。";
+            let text = "Zestyのホームページへようこそ。\n"; // 改行を含める
             let index = 0;
 
             function typeEffect() {
                 if (index < text.length) {
                     if (text[index] === "\n") {
-                        welcomeText.innerHTML += "<br>";
+                        welcomeText.innerHTML += "<br>"; // 改行をHTMLに追加
                     } else {
                         welcomeText.innerHTML += text[index];
                     }
