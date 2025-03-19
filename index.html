@@ -83,13 +83,46 @@
             align-items: center;
             justify-content: center;
         }
+
+        /* ナビゲーションのモバイル表示対応 */
+        .menu-btn {
+            display: none;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        .menu {
+            display: flex;
+            width: 100%;
+            justify-content: space-around;
+            position: absolute;
+            top: 0;
+            left: -100%;
+            background-color: #fff;
+            height: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: left 0.3s ease;
+        }
+        .menu.active {
+            left: 0;
+        }
+        .menu a {
+            font-size: 18px;
+            color: #808080;
+            margin: 10px 0;
+        }
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
                 text-align: center;
             }
             nav {
+                display: none;
                 width: 100%;
+            }
+            .menu-btn {
+                display: block;
             }
             .welcome {
                 font-size: 28px;
@@ -111,16 +144,23 @@
             <a href="https://zesty.f5.si/status">status</a>
             <a href="https://zesty.f5.si/contact">contact</a>
         </nav>
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        <div class="menu">
+            <a href="https://zesty.f5.si/command">command</a>
+            <a href="https://zesty.f5.si/join">join</a>
+            <a href="https://zesty.f5.si/status">status</a>
+            <a href="https://zesty.f5.si/contact">contact</a>
+        </div>
         <a href="en.html" class="lang-switch">EN</a>
     </header>
     <main>
-        <p class="welcome" id="welcome-text"></p><span class="cursor"></span>
+        <p class="welcome" id="welcome-text">ホームページへようこそ。</p><span class="cursor"></span>
     </main>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const welcomeText = document.getElementById("welcome-text");
-            let text = "Zestyのホームページにようこそ。";
+            let text = "ホームページへようこそ。";
             let index = 0;
 
             function typeEffect() {
@@ -137,6 +177,12 @@
 
             typeEffect();
         });
+
+        // メニューの表示切替
+        function toggleMenu() {
+            const menu = document.querySelector('.menu');
+            menu.classList.toggle('active');
+        }
     </script>
 </body>
 </html>
