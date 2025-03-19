@@ -31,60 +31,8 @@
             max-width: 150px;
             height: auto;
         }
-        .nav-menu {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-        nav {
-            display: flex;
-            width: 50%;
-            justify-content: space-around;
-        }
-        nav a {
-            color: #808080;
-            text-decoration: none; /* 下線を削除 */
-            font-weight: normal;
-            font-size: 16px;
-            flex: 1;
-            text-align: center;
-        }
-        nav a:hover {
-            color: #333333;
-        }
-        .lang-switch {
-            font-size: 14px;
-            color: #808080;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .lang-switch:hover {
-            color: #333333;
-        }
-        .welcome {
-            font-size: 24px;
-            font-weight: bold;
-            margin: auto;
-            max-width: 90%;
-            line-height: 1.2;
-            overflow: hidden;
-            white-space: nowrap;
-            display: inline-block;
-            text-align: center;
-        }
-        .cursor {
-            display: inline-block;
-            width: 8px;
-            height: 40px;
-            background-color: black;
-            animation: blink 0.7s infinite;
-        }
-        @keyframes blink {
-            50% { opacity: 0; transform: scale(1.05); }
-        }
         .menu-toggle {
-            display: block; /* 常に表示するように変更 */
+            display: block; /* 常に表示 */
             font-size: 30px;
             cursor: pointer;
         }
@@ -102,6 +50,8 @@
         .menu a {
             padding: 10px;
             border-bottom: 1px solid #ddd;
+            text-decoration: none; /* 下線を削除 */
+            color: #808080;
         }
         .menu a:hover {
             color: #333333;
@@ -115,6 +65,26 @@
             align-items: center;
             justify-content: center;
         }
+        .welcome {
+            font-size: 24px;
+            font-weight: bold;
+            margin: auto;
+            max-width: 90%;
+            line-height: 1.2;
+            overflow: hidden;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 40px;
+            background-color: black;
+            animation: blink 0.7s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; transform: scale(1.05); }
+        }
     </style>
 </head>
 <body>
@@ -122,15 +92,7 @@
         <a href="https://zesty.f5.si" class="logo">
             <img src="https://paicha.cloud/uploader/uploads/InShot_20250319_203029653.jpg" alt="Logo">
         </a>
-        <div class="nav-menu">
-            <nav>
-                <a href="https://zesty.f5.si/command">command</a>
-                <a href="https://zesty.f5.si/join">join</a>
-                <a href="https://zesty.f5.si/status">status</a>
-                <a href="https://zesty.f5.si/contact">contact</a>
-            </nav>
-            <span class="menu-toggle" onclick="toggleMenu()">☰</span>
-        </div>
+        <span class="menu-toggle" onclick="toggleMenu()">☰</span>
         <div class="menu" id="mobile-menu">
             <a href="https://zesty.f5.si/command">command</a>
             <a href="https://zesty.f5.si/join">join</a>
@@ -158,17 +120,17 @@
             typeEffect();
         });
 
+        function toggleMenu() {
+            const menu = document.getElementById("mobile-menu");
+            menu.classList.toggle("show");
+        }
+
         window.addEventListener("resize", function() {
             const menu = document.getElementById("mobile-menu");
             if (window.innerWidth > 768 && menu.classList.contains("show")) {
                 menu.classList.remove("show");
             }
         });
-
-        function toggleMenu() {
-            const menu = document.getElementById("mobile-menu");
-            menu.classList.toggle("show");
-        }
     </script>
 </body>
 </html>
