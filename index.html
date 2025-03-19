@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zesty ─ ホーム</title>
-    <meta name="description" content="Zestyは、最高のサーバー体験を提供します！">
+    <meta name="description" content="Zestyは最高のサーバー体験を提供します！">
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -30,6 +30,12 @@
         .logo img {
             max-width: 150px;
             height: auto;
+        }
+        .nav-menu {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
         }
         nav {
             display: flex;
@@ -61,8 +67,9 @@
             font-weight: bold;
             margin: auto;
             max-width: 90%;
-            line-height: 1.5; /* 改行を反映 */
-            white-space: normal; /* 見切れないように調整 */
+            line-height: 1.2;
+            overflow: hidden;
+            white-space: nowrap;
             display: inline-block;
             text-align: center;
         }
@@ -76,48 +83,56 @@
         @keyframes blink {
             50% { opacity: 0; }
         }
+        .menu-toggle {
+            display: none;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        .menu {
+            display: flex;
+            flex-direction: column;
+            display: none;
+            background-color: #fff;
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .menu a {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .menu a:hover {
+            color: #333333;
+        }
+        .menu.show {
+            display: block;
+        }
         main {
             flex-grow: 1;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 30px;
-            height: 20px;
-        }
-        .menu-toggle div {
-            width: 100%;
-            height: 4px;
-            background-color: #333;
-        }
-        .mobile-menu {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-        }
-        .mobile-menu a {
-            margin: 10px 0;
-            color: #808080;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .mobile-menu a:hover {
-            color: #333333;
-        }
         @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
             nav {
+                width: 100%;
                 display: none;
             }
             .menu-toggle {
-                display: flex;
+                display: block;
             }
-            .mobile-menu {
-                display: flex;
+            .welcome {
+                font-size: 28px;
+                white-space: normal;
+                max-width: 80%;
+                text-align: center;
             }
         }
     </style>
@@ -125,54 +140,39 @@
 <body>
     <header>
         <a href="https://zesty.f5.si" class="logo">
-            <img src="https://paicha.cloud/uploader/uploads/InShot_20250319_203029653.jpg" alt="Logo">
+            <img src="https://paicha.cloud/uploader/uploads/InShot_20250319_203029653.jpg" alt="ロゴ">
         </a>
-        <div class="menu-toggle" id="menu-toggle">
-            <div></div>
-            <div></div>
-            <div></div>
+        <div class="nav-menu">
+            <nav>
+                <a href="https://zesty.f5.si/command">command</a>
+                <a href="https://zesty.f5.si/join">join</a>
+                <a href="https://zesty.f5.si/status">status</a>
+                <a href="https://zesty.f5.si/contact">contact</a>
+            </nav>
+            <a href="en.html" class="lang-switch">EN</a>
+            <span class="menu-toggle" onclick="toggleMenu()">☰</span>
         </div>
-        <nav>
-            <a href="https://zesty.f5.si/command">コマンド</a>
-            <a href="https://zesty.f5.si/join">参加</a>
-            <a href="https://zesty.f5.si/status">ステータス</a>
-            <a href="https://zesty.f5.si/contact">連絡先</a>
-        </nav>
-        <a href="en.html" class="lang-switch">English</a> <!-- 英語版へのリンク修正 -->
+        <div class="menu" id="mobile-menu">
+            <a href="https://zesty.f5.si/command">command</a>
+            <a href="https://zesty.f5.si/join">join</a>
+            <a href="https://zesty.f5.si/status">status</a>
+            <a href="https://zesty.f5.si/contact">contact</a>
+        </div>
     </header>
-    <div class="mobile-menu" id="mobile-menu">
-        <a href="https://zesty.f5.si/command">コマンド</a>
-        <a href="https://zesty.f5.si/join">参加</a>
-        <a href="https://zesty.f5.si/status">ステータス</a>
-        <a href="https://zesty.f5.si/contact">連絡先</a>
-    </div>
     <main>
-        <p class="welcome" id="welcome-text">Zestyのホームページへようこそ。</p><span class="cursor"></span>
+        <p class="welcome" id="welcome-text"></p><span class="cursor"></span>
     </main>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const menuToggle = document.getElementById("menu-toggle");
-            const mobileMenu = document.getElementById("mobile-menu");
-            let menuOpen = false;
-
-            menuToggle.addEventListener("click", function() {
-                menuOpen = !menuOpen;
-                if (menuOpen) {
-                    mobileMenu.style.display = "flex";
-                } else {
-                    mobileMenu.style.display = "none";
-                }
-            });
-
             const welcomeText = document.getElementById("welcome-text");
-            let text = "Zestyのホームページへようこそ。\n"; // 改行を含める
+            let text = "ホームページへようこそ。";
             let index = 0;
 
             function typeEffect() {
                 if (index < text.length) {
                     if (text[index] === "\n") {
-                        welcomeText.innerHTML += "<br>"; // 改行をHTMLに追加
+                        welcomeText.innerHTML += "<br>";
                     } else {
                         welcomeText.innerHTML += text[index];
                     }
@@ -183,6 +183,11 @@
 
             typeEffect();
         });
+
+        function toggleMenu() {
+            const menu = document.getElementById("mobile-menu");
+            menu.classList.toggle("show");
+        }
     </script>
 </body>
 </html>
