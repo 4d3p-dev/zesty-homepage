@@ -57,11 +57,11 @@
             color: #333333;
         }
         .welcome {
-            font-size: 48px;
+            font-size: 36px;
             font-weight: bold;
             margin: auto;
             max-width: 90%;
-            line-height: 1.4;
+            line-height: 1.2;
             overflow: hidden;
             white-space: nowrap;
             display: inline-block;
@@ -92,7 +92,7 @@
                 width: 100%;
             }
             .welcome {
-                font-size: 36px;
+                font-size: 28px;
                 white-space: normal;
                 max-width: 80%;
                 text-align: center;
@@ -140,9 +140,11 @@
                 }
             }
 
-            langSwitch.href = isEnglish ? "/index" : "/index/en";
-            langSwitch.textContent = isEnglish ? "日本語" : "EN"
-            
+            // 言語切り替えリンク設定
+            langSwitch.href = isEnglish ? "/en" : "/index";
+            langSwitch.textContent = isEnglish ? "日本語" : "EN";
+
+            // テキスト入力アニメーション開始
             text = window.innerWidth <= 768 ? mobileText : text;
             typeEffect();
         });
