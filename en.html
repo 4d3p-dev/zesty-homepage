@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zesty ─ home</title>
+    <title>Zesty ─ Home</title>
     <meta name="description" content="Zesty lets you have the best server life experience!">
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -63,7 +63,7 @@
             color: #333333;
         }
         .welcome {
-            font-size: 24px; /* 小さくしたサイズ */
+            font-size: 24px;
             font-weight: bold;
             margin: auto;
             max-width: 90%;
@@ -81,7 +81,7 @@
             animation: blink 0.7s infinite;
         }
         @keyframes blink {
-            50% { opacity: 0; }
+            50% { opacity: 0; transform: scale(1.05); }
         }
         .menu-toggle {
             display: none;
@@ -89,9 +89,8 @@
             cursor: pointer;
         }
         .menu {
-            display: flex;
-            flex-direction: column;
             display: none;
+            flex-direction: column;
             background-color: #fff;
             position: absolute;
             top: 50px;
@@ -108,7 +107,7 @@
             color: #333333;
         }
         .menu.show {
-            display: block;
+            display: flex;
         }
         main {
             flex-grow: 1;
@@ -170,18 +169,20 @@
             let index = 0;
 
             function typeEffect() {
+                welcomeText.textContent = text.slice(0, ++index);
                 if (index < text.length) {
-                    if (text[index] === "\n") {
-                        welcomeText.innerHTML += "<br>";
-                    } else {
-                        welcomeText.innerHTML += text[index];
-                    }
-                    index++;
                     setTimeout(typeEffect, 100);
                 }
             }
 
             typeEffect();
+        });
+
+        window.addEventListener("resize", function() {
+            const menu = document.getElementById("mobile-menu");
+            if (window.innerWidth > 768 && menu.classList.contains("show")) {
+                menu.classList.remove("show");
+            }
         });
 
         function toggleMenu() {
