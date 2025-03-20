@@ -3,89 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zesty ─ ステータス</title>
-    <meta name="description" content="サーバーのステータスを確認">
-    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400;700&display=swap" rel="stylesheet">
+    <title>サーバーステータス</title>
     <style>
         body {
-            font-family: 'M PLUS 1p', sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
             text-align: center;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
+
         header {
             background-color: #ffffff;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             padding: 10px 20px;
-            width: 100%;
-            box-sizing: border-box;
             box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         .logo img {
             max-width: 150px;
             height: auto;
         }
+
         .menu-toggle {
-            display: block;
             font-size: 30px;
             cursor: pointer;
         }
+
         .menu {
             display: none;
             flex-direction: column;
-            background-color: #fff;
             position: absolute;
             top: 50px;
             right: 20px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
             padding: 10px;
-            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         .menu a {
             padding: 10px;
-            border-bottom: 1px solid #ddd;
             text-decoration: none;
             color: #808080;
+            border-bottom: 1px solid #ddd;
         }
+
         .menu a:hover {
             color: #333333;
         }
+
         .menu.show {
             display: flex;
         }
-        main {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+
         .status-container {
-            width: 80%;
-            max-width: 600px;
-            margin-top: 20px;
+            margin-top: 50px;
         }
-        .status-bar {
+
+        .status {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .status div {
+            width: 200px;
             height: 30px;
             background-color: #ddd;
-            margin: 10px 0;
             border-radius: 5px;
-            text-align: center;
-            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status div span {
+            display: block;
+            height: 100%;
+            background-color: #4CAF50;
+        }
+
+        .status-label {
+            margin-bottom: 5px;
             font-weight: bold;
-            line-height: 30px;
         }
-        .cpu-bar {
-            background-color: #4caf50;
-        }
-        .memory-bar {
-            background-color: #2196f3;
+
+        .value {
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            color: white;
         }
     </style>
 </head>
@@ -103,44 +111,51 @@
             <a href="en.html" class="lang-switch">EN</a>
         </div>
     </header>
+
     <main>
-        <p class="welcome" id="welcome-text">サーバーのステータス</p>
+        <h1>サーバーステータス</h1>
         <div class="status-container">
-            <div id="cpu-bar" class="status-bar cpu-bar">Loading CPU Usage...</div>
-            <div id="memory-bar" class="status-bar memory-bar">Loading Memory Usage...</div>
+            <div class="status">
+                <div class="cpu">
+                    <div><span id="cpuUsage" style="width: 0%"></span></div>
+                    <div class="value" id="cpuValue">0%</div>
+                </div>
+                <div class="memory">
+                    <div><span id="memoryUsage" style="width: 0%"></span></div>
+                    <div class="value" id="memoryValue">0%</div>
+                </div>
+            </div>
         </div>
     </main>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            fetchServerStatus();
-        });
+            // サーバーステータスを取得するURL
+            const url = 'http://15.168.39.25/status';
 
-        async function fetchServerStatus() {
-            try {
-                const response = await fetch("http://15.168.39.25/status");
-                const data = await response.json();
-
-                if (!data) {
-                    alert("データが取得できませんでした");
-                } else {
-                    // CPU使用率をグラフに反映
+            // データを取得して横棒グラフに反映
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
                     const cpuUsage = parseFloat(data.cpuUsage.replace('%', ''));
-                    const cpuBar = document.getElementById("cpu-bar");
-                    cpuBar.style.width = cpuUsage + "%";
-                    cpuBar.textContent = "CPU Usage: " + cpuUsage.toFixed(2) + "%";
-
-                    // メモリ使用率をグラフに反映
                     const memoryUsage = parseFloat(data.memoryUsage.replace('%', ''));
-                    const memoryBar = document.getElementById("memory-bar");
-                    memoryBar.style.width = memoryUsage + "%";
-                    memoryBar.textContent = "Memory Usage: " + memoryUsage.toFixed(2) + "%";
-                }
-            } catch (error) {
-                console.error("ステータスの取得に失敗しました:", error);
-                alert("ステータスの取得に失敗しました");
-            }
-        }
+
+                    // CPU使用率の更新
+                    const cpuBar = document.getElementById('cpuUsage');
+                    const cpuValue = document.getElementById('cpuValue');
+                    cpuBar.style.width = `${cpuUsage}%`;
+                    cpuValue.textContent = `${cpuUsage.toFixed(2)}%`;
+
+                    // メモリ使用率の更新
+                    const memoryBar = document.getElementById('memoryUsage');
+                    const memoryValue = document.getElementById('memoryValue');
+                    memoryBar.style.width = `${memoryUsage}%`;
+                    memoryValue.textContent = `${memoryUsage.toFixed(2)}%`;
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        });
 
         function toggleMenu() {
             const menu = document.getElementById("mobile-menu");
