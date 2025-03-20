@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zesty ─ ステータス</title>
-    <meta name="description" content="Zestyのサーバーステータスを確認しよう！">
+    <meta name="description" content="Zestyのサーバーステータスを表示します">
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: 'M PLUS 1p', sans-serif;
@@ -67,11 +66,40 @@
             justify-content: center;
             flex-direction: column;
         }
-        canvas {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
+        .welcome {
+            font-size: 24px;
+            font-weight: bold;
+            margin: auto;
             max-width: 90%;
+            line-height: 1.2;
+            overflow: hidden;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 40px;
+            background-color: black;
+            animation: blink 0.7s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; transform: scale(1.05); }
+        }
+        .graph {
+            margin-top: 30px;
+            width: 80%;
+            height: 25px;
+            border-radius: 5px;
+            background-color: #e0e0e0;
+        }
+        .bar {
+            height: 100%;
+            text-align: center;
+            line-height: 25px;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -86,53 +114,42 @@
             <a href="https://zesty.f5.si/join">参加</a>
             <a href="https://zesty.f5.si/status">ステータス</a>
             <a href="https://zesty.f5.si/contact">連絡</a>
-            <a href="statusen.html" class="lang-switch">EN</a>
+            <a href="en.html" class="lang-switch">EN</a>
         </div>
     </header>
-
     <main>
-        <h2>サーバーステータス</h2>
-        <canvas id="statusChart"></canvas>
+        <p class="welcome" id="welcome-text">ホームページへようこそ。</p><span class="cursor"></span>
+
+        <!-- CPU 使用率グラフ -->
+        <div class="graph">
+            <div id="cpu-graph" class="bar" style="width: 0%; background-color: #4CAF50;">
+                0%
+            </div>
+        </div>
+
+        <!-- メモリ使用率グラフ -->
+        <div class="graph" style="margin-top: 10px;">
+            <div id="memory-graph" class="bar" style="width: 0%; background-color: #2196F3;">
+                0%
+            </div>
+        </div>
     </main>
 
     <script>
-        async function fetchServerStatus() {
-            try {
-                const response = await fetch("http://15.168.39.25/status");
-                const data = await response.json();
+        document.addEventListener("DOMContentLoaded", function() {
+            const welcomeText = document.getElementById("welcome-text");
+            let text = "ホームページへようこそ。";
+            let index = 0;
 
-                const cpuUsage = parseFloat(data.cpuUsage.replace("%", ""));
-                const memoryUsage = parseFloat(data.memoryUsage.replace("%", ""));
-
-                const ctx = document.getElementById("statusChart").getContext("2d");
-                new Chart(ctx, {
-                    type: "bar",
-                    data: {
-                        labels: ["CPU 使用率", "メモリ 使用率"],
-                        datasets: [{
-                            label: "使用率 (%)",
-                            data: [cpuUsage, memoryUsage],
-                            backgroundColor: ["#ff6384", "#36a2eb"],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        indexAxis: 'y',
-                        responsive: true,
-                        scales: {
-                            x: {
-                                beginAtZero: true,
-                                max: 100
-                            }
-                        }
-                    }
-                });
-            } catch (error) {
-                console.error("ステータスの取得に失敗しました:", error);
+            function typeEffect() {
+                welcomeText.textContent = text.slice(0, ++index);
+                if (index < text.length) {
+                    setTimeout(typeEffect, 100);
+                }
             }
-        }
 
-        fetchServerStatus();
+            typeEffect();
+        });
 
         function toggleMenu() {
             const menu = document.getElementById("mobile-menu");
@@ -145,6 +162,36 @@
                 menu.classList.remove("show");
             }
         });
+
+        async function fetchServerStatus() {
+            try {
+                const response = await fetch("http://15.168.39.25/status");
+                const data = await response.json();
+
+                if (!data) {
+                    alert("データが取得できませんでした");
+                } else {
+                    // CPU使用率をグラフに反映
+                    const cpuUsage = parseFloat(data.cpuUsage);
+                    const cpuBar = document.getElementById("cpu-graph");
+                    cpuBar.style.width = cpuUsage + "%";
+                    cpuBar.textContent = cpuUsage.toFixed(2) + "%";
+
+                    // メモリ使用率をグラフに反映
+                    const memoryUsage = parseFloat(data.memoryUsage);
+                    const memoryBar = document.getElementById("memory-graph");
+                    memoryBar.style.width = memoryUsage + "%";
+                    memoryBar.textContent = memoryUsage.toFixed(2) + "%";
+
+                    console.log("取得したデータ:", data);
+                }
+            } catch (error) {
+                console.error("ステータスの取得に失敗しました:", error);
+                alert("ステータスの取得に失敗しました");
+            }
+        }
+
+        fetchServerStatus();
     </script>
 </body>
 </html>
