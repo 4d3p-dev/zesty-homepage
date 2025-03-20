@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zesty ─ Status</title>
+    <meta name="description" content="Zestyのサーバーステータスを確認しよう！">
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'M PLUS 1p', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        header {
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .logo img {
+            max-width: 150px;
+            height: auto;
+        }
+        .menu {
+            color: #808080;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 10px;
+        }
+        .menu:hover {
+            color: #333333;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+        }
+        canvas {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="https://zesty.f5.si" class="logo">
+            <img src="https://paicha.cloud/uploader/uploads/InShot_20250319_203029653.jpg" alt="ロゴ">
+        </a>
+        <nav>
+            <a href="https://zesty.f5.si" class="menu">Home</a>
+            <a href="https://zesty.f5.si/command" class="menu">Command</a>
+            <a href="https://zesty.f5.si/join" class="menu">Join</a>
+            <a href="https://zesty.f5.si/status" class="menu">Status</a>
+            <a href="https://zesty.f5.si/contact" class="menu">Contact</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>サーバーステータス</h2>
+        <canvas id="statusChart"></canvas>
+    </div>
+
+    <script>
+        async function fetchServerStatus() {
+            try {
+                const response = await fetch("http://15.168.39.25/status");
+                const data = await response.json();
+
+                const cpuUsage = parseFloat(data.cpuUsage.replace("%", ""));
+                const memoryUsage = parseFloat(data.memoryUsage.replace("%", ""));
+
+                const ctx = document.getElementById("statusChart").getContext("2d");
+                new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: ["CPU 使用率", "メモリ 使用率"],
+                        datasets: [{
+                            label: "使用率 (%)",
+                            data: [cpuUsage, memoryUsage],
+                            backgroundColor: ["#ff6384", "#36a2eb"],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("ステータスの取得に失敗しました:", error);
+            }
+        }
+
+        fetchServerStatus();
+    </script>
+</body>
+</html>
